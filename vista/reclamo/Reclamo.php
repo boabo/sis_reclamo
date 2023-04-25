@@ -543,7 +543,7 @@ header("content-type: text/javascript; charset=UTF-8");
                 forceSelection: true,
                 triggerAction:'all',
                 mode:'local',
-                store:[ 'BCN', 'BUE', 'BYC', 'CBB', 'CCA',  'LPB', 'CIJ', 'MAD', 'MIA', 'ORU', 'POI', 'RIB', 'RBQ', 'SAO', 'SLA', 'S.RE', 'SRZ', 'TDD', 'TJA', 'UYU'],
+                store:[ 'BCN', 'BUE', 'BYC', 'CBB', 'CCA',  'LPB', 'CIJ', 'MAD', 'MIA', 'ORU', 'POI', 'RIB', 'RBQ', 'SAO', 'SLA', 'S.RE', 'SRZ', 'TDD', 'TJA', 'UYU', 'LIM'],
 				style:'text-transform:uppercase;'
 			},
 			type: 'ComboBox',
@@ -563,7 +563,7 @@ header("content-type: text/javascript; charset=UTF-8");
                 forceSelection: true,
                 triggerAction:'all',
                 mode:'local',
-                store:['BCN', 'BUE', 'BYC', 'CBB', 'CCA',  'LPB', 'CIJ', 'MAD', 'MIA', 'ORU', 'POI', 'RIB', 'RBQ', 'SAO', 'SLA', 'S.RE', 'SRZ', 'TDD', 'TJA', 'UYU'],
+                store:['BCN', 'BUE', 'BYC', 'CBB', 'CCA',  'LPB', 'CIJ', 'MAD', 'MIA', 'ORU', 'POI', 'RIB', 'RBQ', 'SAO', 'SLA', 'S.RE', 'SRZ', 'TDD', 'TJA', 'UYU', 'LIM'],
 				style:'text-transform:uppercase;'
 			},
 			type: 'ComboBox',
@@ -584,7 +584,7 @@ header("content-type: text/javascript; charset=UTF-8");
                 forceSelection: true,
                 triggerAction:'all',
                 mode:'local',
-                store:['BCN', 'BUE', 'BYC', 'CBB', 'CCA',  'LPB', 'CIJ', 'MAD', 'MIA', 'ORU', 'POI', 'RIB', 'RBQ', 'SAO', 'SLA', 'S.RE', 'SRZ', 'TDD', 'TJA', 'UYU'],
+                store:['BCN', 'BUE', 'BYC', 'CBB', 'CCA',  'LPB', 'CIJ', 'MAD', 'MIA', 'ORU', 'POI', 'RIB', 'RBQ', 'SAO', 'SLA', 'S.RE', 'SRZ', 'TDD', 'TJA', 'UYU', 'LIM'],
                 style:'text-transform:uppercase;'
 
 			},

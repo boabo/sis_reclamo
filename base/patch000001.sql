@@ -335,5 +335,17 @@ ALTER TABLE rec.treclamo_informe
   ALTER COLUMN id_informe SET STATISTICS 0;
 
 
+CREATE TABLE rec.trol (
+    id_rol SERIAL,
+    json_rol JSONB DEFAULT '{}'::jsonb,
+    CONSTRAINT trol_pkey PRIMARY KEY(id_rol)
+) INHERITS (pxp.tbase)
+  WITH (oids = false);
+
+COMMENT ON COLUMN rec.trol.json_rol
+    IS 'Almacena los roles del sistema reclamos.';
+
+ALTER TABLE rec.trol
+    OWNER TO postgres;
 
 /***********************************F-SCP-FEA-REC-0-07/11/2018****************************************/

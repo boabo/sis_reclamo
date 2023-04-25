@@ -211,6 +211,19 @@ class ACTRespuesta extends ACTbase
 		
 	}
 
+    function getAnswersList()
+    {
+        $current_year = date('Y');
+
+        if($this->objParam->getParametro('estado')!='') {
+            $this->objParam->addFiltro("res.estado = ''".$this->objParam->getParametro('estado')."'' and res.fecha_reg::date between ''01/01/$current_year''::date and ''31/12/$current_year''::date ");
+        }
+
+        $this->objFunc = $this->create('MODRespuesta');
+        $this->res = $this->objFunc->getAnswersList($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
 }
 
 ?>

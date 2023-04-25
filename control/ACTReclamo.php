@@ -350,36 +350,43 @@ class ACTReclamo extends ACTbase{
 
 
         $this->mensajeExito=new Mensaje();
-        $this->mensajeExito->setMensaje('EXITO','Reporte.php','Reporte generado',
+        $this->mensajeExito->setMensaje('EXITO','Reporte.php',$nombreArchivo,
             'Se generó con éxito el reporte: '.$nombreArchivo,'control');
         $this->mensajeExito->setArchivoGenerado($nombreArchivo);
         $this->mensajeExito->imprimirRespuesta($this->mensajeExito->generarJson());
     }
 
 	function libroRespuesta(){
+
 		$this->objFunc=$this->create('MODReclamo');
 
-		$this->res=$this->objFunc->listarResp($this->objParam);
-		//obtener titulo del reporte
-		$titulo = 'Libro De Respuestas';
-		//Genera el nombre del archivo (aleatorio + titulo)
-		$nombreArchivo=uniqid(md5(session_id()).$titulo);
-		$nombreArchivo.='.pdf';
-		$this->objParam->addParametro('orientacion','L');
-		$this->objParam->addParametro('tamano','LETTER');
-		$this->objParam->addParametro('nombre_archivo',$nombreArchivo);
-		//Instancia la clase de pdf
-		$this->objReporteFormato=new RLibroRespuestaPDF ($this->objParam);
-		$this->objReporteFormato->setDatos($this->res->datos);
-		$this->objReporteFormato->generarReporte();
-		$this->objReporteFormato->output($this->objReporteFormato->url_archivo,'F');
+        if ( $this->objParam->getParametro('tipo') != 'listado' ) {
+            $this->res = $this->objFunc->listarResp($this->objParam);
+            //obtener titulo del reporte
+            $titulo = 'Libro De Respuestas';
+            //Genera el nombre del archivo (aleatorio + titulo)
+            $nombreArchivo = uniqid(md5(session_id()) . $titulo);
+            $nombreArchivo .= '.pdf';
+            $this->objParam->addParametro('orientacion', 'L');
+            $this->objParam->addParametro('tamano', 'LETTER');
+            $this->objParam->addParametro('nombre_archivo', $nombreArchivo);
+            //Instancia la clase de pdf
+            $this->objReporteFormato = new RLibroRespuestaPDF ($this->objParam);
+            $this->objReporteFormato->setDatos($this->res->datos);
+            $this->objReporteFormato->generarReporte();
+            $this->objReporteFormato->output($this->objReporteFormato->url_archivo, 'F');
 
 
-		$this->mensajeExito=new Mensaje();
-		$this->mensajeExito->setMensaje('EXITO','Reporte.php','Reporte generado',
-			'Se generó con éxito el reporte: '.$nombreArchivo,'control');
-		$this->mensajeExito->setArchivoGenerado($nombreArchivo);
-		$this->mensajeExito->imprimirRespuesta($this->mensajeExito->generarJson());
+            $this->mensajeExito = new Mensaje();
+            $this->mensajeExito->setMensaje('EXITO', 'Reporte.php', $nombreArchivo,
+                'Se generó con éxito el reporte: ' . $nombreArchivo, 'control');
+            $this->mensajeExito->setArchivoGenerado($nombreArchivo);
+            $this->mensajeExito->imprimirRespuesta($this->mensajeExito->generarJson());
+        }else{
+
+            $this->res = $this->objFunc->listarResp($this->objParam);
+            $this->res->imprimirRespuesta($this->res->generarJson());
+        }
 	}
 	
 
@@ -636,6 +643,76 @@ class ACTReclamo extends ACTbase{
         $mensajeExito->setMensaje('EXITO', 'Reporte.php', 'Reporte generado', 'Se generó con éxito el reporte: ' . $nombreArchivo, 'control');
         $mensajeExito->setArchivoGenerado($nombreArchivo);
         $this->res = $mensajeExito;
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+    function uploadArchivo(){
+        $this->objFunc = $this->create('MODReclamo');
+        $this->res = $this->objFunc->uploadArchivo($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+    function getDetalleResumen(){
+        $this->objFunc=$this->create('MODReclamo');
+        $this->res=$this->objFunc->getDetalleResumen($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+    function getEstructuraGantt(){
+        $this->objFunc=$this->create('MODReclamo');
+        $this->res=$this->objFunc->getEstructuraGantt($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+
+    function getClaimsList(){
+
+        if($this->objParam->getParametro('estado')!='') {
+            $this->objParam->addFiltro("rec.estado = ''".$this->objParam->getParametro('estado')."''");
+        }
+
+        if($this->objParam->getParametro('id_gestion')!='') {
+            $this->objParam->addFiltro("rec.id_gestion = ".$this->objParam->getParametro('id_gestion'));
+        }
+
+        $this->objFunc=$this->create('MODReclamo');
+        $this->res=$this->objFunc->getClaimsList($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+    function getStatusList(){
+        $this->objFunc=$this->create('MODReclamo');
+        $this->res=$this->objFunc->getStatusList($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+    function getRolesList(){
+        $this->objFunc=$this->create('MODReclamo');
+        $this->res=$this->objFunc->getRolesList($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+    function insertRole(){
+
+        $this->objFunc=$this->create('MODReclamo');
+        if($this->objParam->insertar('id_rol')){
+            $this->res=$this->objFunc->insertRole($this->objParam);
+        } else{
+            $this->res=$this->objFunc->updateRole($this->objParam);
+        }
+        $this->res->imprimirRespuesta($this->res->generarJson());
+
+    }
+
+    function getRolesByOfficial(){
+        $this->objFunc=$this->create('MODReclamo');
+        $this->res=$this->objFunc->getRolesByOfficial($this->objParam);
+        $this->res->imprimirRespuesta($this->res->generarJson());
+    }
+
+    function deleteRole(){
+        $this->objFunc=$this->create('MODReclamo');
+        $this->res=$this->objFunc->deleteRole($this->objParam);
         $this->res->imprimirRespuesta($this->res->generarJson());
     }
 

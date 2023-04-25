@@ -366,5 +366,25 @@ class MODRespuesta extends MODbase{
         return $this->respuesta;
     }
 
+    function getAnswersList(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'rec.ft_respuesta_sel';
+        $this->transaccion = 'REC_ANSWER_LIST';
+        $this->tipo_procedimiento = 'SEL';//tipo de transaccion
+
+        $this->setCount(false);
+
+        //Definicion de la lista del resultado del query
+        $this->captura('listAnswer', 'json');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo($this->consulta);exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
 
 }

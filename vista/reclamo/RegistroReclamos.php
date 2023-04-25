@@ -39,10 +39,9 @@ header("content-type: text/javascript; charset=UTF-8");
                  return  String.format('{0}',"<div style='text-align:center'><img title='Tiene 72 Horas Para adjuntar Informe'  src = '../../../sis_reclamo/media/three.png' align='center' width='24' height='24'/></div>");
              }else if (dias == 2) {
                  return  String.format('{0}',"<div style='text-align:center'><img title='Tiene 48 Horas Para adjuntar Informe'  src = '../../../sis_reclamo/media/two.png' align='center' width='24' height='24'/></div>");
-             }
-             else if(dias>=0 && dias<=1){
+             } else if(dias>=0 && dias<=1){
                  return  String.format('{0}',"<div style='text-align:center'><img title='Tiene 24 Horas Para adjuntar Informe'  src = '../../../sis_reclamo/media/cero.png' align='center' width='24' height='24'/></div>");
-             }else if(dias = -1){
+             }else if(dias = -1 && record.data.revisado != 'con_informe'){
                  return  String.format('{0}',"<div style='text-align:center'><img title='Ha vencido el Plazo para poder adjuntar Informe'  src = '../../../sis_reclamo/media/bomb.png' align='center' width='24' height='24'/></div>");
              }
              }

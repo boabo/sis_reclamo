@@ -106,11 +106,11 @@ header("content-type: text/javascript; charset=UTF-8");
 
     liberaMenu:function(){
         var tb = Phx.vista.RegistroReclamoAnulado.superclass.liberaMenu.call(this);
-        
+
         if(tb){        
             this.getBoton('sig_estado').disable();
             this.getBoton('ant_estado').setVisible(false);
-			this.getBoton('btnObs').setVisible(false);                                  
+			this.getBoton('btnObs').setVisible(false);
         }
 
         return tb;

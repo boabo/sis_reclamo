@@ -973,4 +973,243 @@ class MODReclamo extends MODbase
         //Devuelve la respuesta
         return $this->respuesta;
     }
+
+    function uploadArchivo(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'wf.ft_documento_wf_ime';
+        $this->transaccion = 'WF_DOCWFAR_MOD';
+        $this->tipo_procedimiento = 'IME';//tipo de transaccion
+
+
+        $upload_folder =  './../../../uploaded_files/sis_workflow/DocumentoWf/';
+        $image_parts = explode(";base64,", $this->aParam->getParametro('archivo'));
+        $image_type_aux = explode("application/", $image_parts[0]);
+        $image_base64 = base64_decode($image_parts[1]);
+        $file_name = md5($this->aParam->getParametro('id_documento_wf') . $_SESSION["_SEMILLA"]);
+        $file = $upload_folder . $file_name . '.' . $this->aParam->getParametro('extension');
+        file_put_contents($file, $image_base64);
+
+        $this->arreglo['file_name'] = $file;
+        $this->arreglo['folder'] = $upload_folder;
+        $this->arreglo['only_file'] = $file_name;
+
+        //Define los parametros para la funcion
+        $this->setParametro('id_documento_wf','id_documento_wf','integer');
+        $this->setParametro('extension','extension','varchar');
+        $this->setParametro('file_name','file_name','varchar');
+        $this->setParametro('folder','folder','varchar');
+        $this->setParametro('only_file','only_file','varchar');
+
+        //Definicion de la lista del resultado del query
+        //$this->captura('jsonData', 'text');
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo $this->consulta;exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function getDetalleResumen(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'rec.ft_reclamo_sel';
+        $this->transaccion = 'REC_DET_RES_CLAIMS';
+        $this->tipo_procedimiento = 'SEL';//tipo de transaccion
+        $this->setCount(false);
+
+        //Define los parametros para la funcion
+        $this->setParametro('fecha_ini','fecha_ini','date');
+        $this->setParametro('fecha_fin','fecha_fin','date');
+
+        //Definicion de la lista del resultado del query
+        $this->captura('jsonData', 'text');
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo $this->consulta;exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function getEstructuraGantt(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'rec.ft_reclamo_sel';
+        $this->transaccion = 'REC_GANTT_CLAIM';
+        $this->tipo_procedimiento = 'SEL';//tipo de transaccion
+        $this->setCount(false);
+
+        //Define los parametros para la funcion
+        $this->setParametro('id_proceso_wf','id_proceso_wf','integer');
+
+
+        //Definicion de la lista del resultado del query
+        //$this->captura('jsonData', 'text');
+
+        $this->captura('id_proceso_wf', 'integer');
+        $this->captura('id_estado_wf','integer');
+        $this->captura('tipo','varchar');
+        $this->captura('nombre','varchar');
+        $this->captura('fecha_ini','timestamp');
+        $this->captura('fecha_fin','timestamp');
+        $this->captura('descripcion','text');
+        $this->captura('nro_tramite','varchar');
+        $this->captura('codigo','varchar');
+        $this->captura('id_funcionario','integer');
+        $this->captura('funcionario','varchar');
+        $this->captura('id_usuario','integer');
+        $this->captura('cuenta','varchar');
+        $this->captura('id_depto','integer');
+        $this->captura('departamento','varchar');
+        $this->captura('etapa','varchar');
+        $this->captura('estado_reg','varchar');
+        $this->captura('disparador','varchar');
+        $this->captura('fin','varchar');
+        $this->captura('usuario_ai','varchar');
+        $this->captura('image_url','varchar');
+        $this->captura('image_type','varchar');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo $this->consulta;exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function getClaimsList(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'rec.ft_reclamo_sel';
+        $this->transaccion = 'REC_CLAIMS_LIST';
+        $this->tipo_procedimiento = 'SEL';//tipo de transaccion
+
+        $this->setCount(false);
+
+        //Definicion de la lista del resultado del query
+        $this->captura('listClaims', 'json');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo($this->consulta);exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function getStatusList(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'rec.ft_reclamo_sel';
+        $this->transaccion = 'REC_STATUS_LIST';
+        $this->tipo_procedimiento = 'SEL';//tipo de transaccion
+
+        $this->setCount(false);
+
+        $this->setParametro('codigo','codigo','varchar');
+        //Definicion de la lista del resultado del query
+        $this->captura('status_list', 'json');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo($this->consulta);exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function getRolesList(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'rec.ft_reclamo_sel';
+        $this->transaccion = 'REC_ROLES_LIST';
+        $this->tipo_procedimiento = 'SEL';//tipo de transaccion
+
+        $this->setCount(false);
+
+        //Definicion de la lista del resultado del query
+        $this->captura('roles_list', 'json');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo($this->consulta);exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function insertRole(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento='rec.ft_reclamo_ime';
+        $this->transaccion='REC_INSERT_ROLE';
+        $this->tipo_procedimiento='IME';//tipo de transaccion
+        //$this->setCount(true);
+
+        $this->setParametro('rol','rol','text');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo($this->consulta); exit;
+        $this->ejecutarConsulta();
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function updateRole(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento='rec.ft_reclamo_ime';
+        $this->transaccion='REC_UPDATE_ROLE';
+        $this->tipo_procedimiento='IME';//tipo de transaccion
+        //$this->setCount(true);
+
+        $this->setParametro('id_rol','id_rol','integer');
+        $this->setParametro('rol','rol','text');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo($this->consulta); exit;
+        $this->ejecutarConsulta();
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function getRolesByOfficial(){
+        //Definicion de variables para ejecucion del procedimientp
+        $this->procedimiento = 'rec.ft_reclamo_sel';
+        $this->transaccion = 'REC_ROLES_BY_OFF';
+        $this->tipo_procedimiento = 'SEL';//tipo de transaccion
+
+        $this->setCount(false);
+
+        //Definicion de la lista del resultado del query
+        $this->captura('json_rol', 'json');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();
+        //echo($this->consulta);exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
+
+    function deleteRole()
+    {
+        //Definicion de variables para ejecucion del procedimiento
+        $this->procedimiento = 'rec.ft_reclamo_ime';
+        $this->transaccion = 'REC_DELETE_ROLE';
+        $this->tipo_procedimiento = 'IME';
+
+        //Define los parametros para la funcion
+        $this->setParametro('id_rol', 'id_rol', 'int4');
+
+        //Ejecuta la instruccion
+        $this->armarConsulta();//echo $this->consulta;exit;
+        $this->ejecutarConsulta();
+
+        //Devuelve la respuesta
+        return $this->respuesta;
+    }
 }

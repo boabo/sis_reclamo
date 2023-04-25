@@ -54,37 +54,51 @@ class ACTCliente extends ACTbase{
 
     function libroReclamo(){
 
-       if ($this->objParam->getParametro('id_oficina_registro_incidente') == '') {
+        if ( $this->objParam->getParametro('id_oficina_registro_incidente') == '' && $this->objParam->getParametro('id_oficina_registro_incidente') != 0 ) {
             $this->objParam->addParametro('id_oficina_registro_incidente','-1');
             //$this->objParam->addParametro('id_oficina_registro_incidente','TODOS');
         }
-        $this->objParam->getParametro('fecha_ini');
-        $this->objParam->getParametro('fecha_fin');
 
-        $this->objFunc=$this->create('MODCliente');
-        $this->res=$this->objFunc->listarClienteLibro($this->objParam);
-        //obtener titulo del reporte
+        if ( $this->objParam->getParametro('tipo') != 'listado' ) {
+            $this->objParam->getParametro('fecha_ini');
+            $this->objParam->getParametro('fecha_fin');
 
-        $titulo = 'Libro De Reclamo';
-        //Genera el nombre del archivo (aleatorio + titulo)
-        $nombreArchivo=uniqid(md5(session_id()).$titulo);
-        $nombreArchivo.='.pdf';
-        $this->objParam->addParametro('orientacion','L');
-        $this->objParam->addParametro('tamano','LETTER');
-        $this->objParam->addParametro('nombre_archivo',$nombreArchivo);
-        //Instancia la clase de pdf
+            $this->objFunc = $this->create('MODCliente');
+            $this->res = $this->objFunc->listarClienteLibro($this->objParam);
+            //obtener titulo del reporte
 
-        $this->objReporteFormato=new RLibroReclamoPDF ($this->objParam);
-        $this->objReporteFormato->setDatos($this->res->datos);
-        $this->objReporteFormato->generarReporte();
-        $this->objReporteFormato->output($this->objReporteFormato->url_archivo,'F');
+            $titulo = 'Libro De Reclamo';
+            //Genera el nombre del archivo (aleatorio + titulo)
+            $nombreArchivo = uniqid(md5(session_id()) . $titulo);
+            $nombreArchivo .= '.pdf';
+            $this->objParam->addParametro('orientacion', 'L');
+            $this->objParam->addParametro('tamano', 'LETTER');
+            $this->objParam->addParametro('nombre_archivo', $nombreArchivo);
+            //Instancia la clase de pdf
+
+            $this->objReporteFormato = new RLibroReclamoPDF ($this->objParam);
+            $this->objReporteFormato->setDatos($this->res->datos);
+            $this->objReporteFormato->generarReporte();
+            $this->objReporteFormato->output($this->objReporteFormato->url_archivo, 'F');
 
 
-        $this->mensajeExito=new Mensaje();
-        $this->mensajeExito->setMensaje('EXITO','Reporte.php','Reporte generado',
-            'Se generó con éxito el reporte: '.$nombreArchivo,'control');
-        $this->mensajeExito->setArchivoGenerado($nombreArchivo);
-        $this->mensajeExito->imprimirRespuesta($this->mensajeExito->generarJson());
+            $this->mensajeExito = new Mensaje();
+            $this->mensajeExito->setMensaje('EXITO', 'Reporte.php', 'Reporte generado',
+                'Se generó con éxito el reporte: ' . $nombreArchivo, 'control');
+            $this->mensajeExito->setArchivoGenerado($nombreArchivo);
+            $this->mensajeExito->imprimirRespuesta($this->mensajeExito->generarJson());
+        }else{
+
+            if ($this->objParam->getParametro('id_oficina_registro_incidente') == 0) {
+                $this->objParam->addFiltro("re.id_oficina_registro_incidente != " . $this->objParam->getParametro('id_oficina_registro_incidente'));
+            }else{
+                $this->objParam->addFiltro("re.id_oficina_registro_incidente = " . $this->objParam->getParametro('id_oficina_registro_incidente'));
+            }
+            $this->objFunc = $this->create('MODCliente');
+            $this->res = $this->objFunc->listarClienteLibro($this->objParam);
+
+            $this->res->imprimirRespuesta($this->res->generarJson());
+        }
     }
 
     function validarCliente(){
